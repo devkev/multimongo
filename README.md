@@ -1,6 +1,8 @@
 MultiMongo: Bidirectional synchronisation of multiple separate MongoDB clusters
 ===============================================================================
 
+![Demo showing basic usage of MultiMongo](multimongo-demo.gif)
+
 Yes, this has a whole lot of limitations.  Mostly this thing is intended for simple, lightweight, human-timescale applications - the actual motivation is a personal todo system which supports writes while offline, and syncs up when online again.  So it's fine to have "downsides" like clocks synced only with NTP (rather than atomic clocks like Spanner), inconsistent data in between syncs, naive last-write-wins conflict resolution, etc.
 
 I looked into Realm, but it has no Python API (since it's targeted at mobile devices, not laptops) and Grainite, but it seemed like a complicated sledgehammer for cracking this nut.  In the absence of such syncing frameworks, the usual approach is to either just accept online-only usage (perhaps with a read-only local cache), or for the application to handle all the syncing logic, ie. remembering the user operations, when they were done, and then reconciling them when back online.  That's frustrating because it's basically reinventing the oplog.  So I figured, why not just use the oplog for this purpose?
